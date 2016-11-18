@@ -1,5 +1,11 @@
-FROM 172.16.0.36:5000/feedstream-tomcat:v4
+FROM index.alauda.cn/library/java:openjdk-8-alpine
 MAINTAINER "Longwei Li <longwei.li@moji.com>"
-WORKDIR /apache-tomcat-7.0.33-Feedstream
-RUN rm -rf /apache-tomcat-7.0.33-Feedstream/webapps/feedstream
-ADD ./apache-tomcat-7.0.33-Feedstream/webapps/feedstream /apache-tomcat-7.0.33-Feedstream/webapps/feedstream
+RUN apk add -U tzdata
+RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+WORKDIR /apache-tomcat-7.0.33-SF
+ADD ./apache-tomcat-7.0.33-SF/ /apache-tomcat-7.0.33-SF
+ADD ./run.sh /apache-tomcat-7.0.33-SF/run.sh
+RUN chmod 777 /apache-tomcat-7.0.33-SF/run.sh
+ADD ./hosts_addr /apache-tomcat-7.0.33-SF/hosts_addr
+EXPOSE 7011
+CMD ["/bin/sh","/apache-tomcat-7.0.33-SF/run.sh"]
